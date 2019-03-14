@@ -111,24 +111,21 @@ fi = (function() {
         return self.indexOf(value) === index;
       }
 
-      // I shamelessly copied this because... well, just look at it.
-      // I made tiny improvements to how return is conducted, but that's it.
+      let result = [];
+      const map = new Map();
 
       if (flag) {
         result = data.slice().filter(singular);
       } else if (!conditional) {
         result = Array.from(new Set(data));
       } else {
-        const modVals = new Set()
-        const uniqVals = new Set()
-        for (let val of data) {
-          const conditionedVal = conditional(val)
-          if (!modVals.has(conditionedVal)) {
-            modVals.add(conditionedVal)
-            uniqVals.add(val)
+        for (let item of data) {
+          const chk = conditional(item);
+          if (!map.has(chk)) {
+            map.set(chk, data[chk]);
+            result.push(item);
           }
         }
-        result = Array.from(uniqVals)
       }
       return result;
     },
